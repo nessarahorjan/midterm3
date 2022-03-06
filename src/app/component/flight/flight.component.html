@@ -1,0 +1,124 @@
+<div class="container">
+  <div class="row">
+    <h1 class="mt-5 mb-3 text-center">Book a Flight</h1>
+    <form [formGroup]="flightForm" (ngSubmit)="onSubmit(flightForm.value)">
+      <div class="mx-auto mb-3 w-50">
+        <label><b>Full Name</b></label>
+        <span style="color: red;" *ngIf="flightForm.get('fullName')?.errors?.['required']">*required</span>
+        <input type="text" class="form-control" id="fullName" formControlName="fullName" required />
+      </div>
+      <div class="container">
+        <div class="row g-2 justify-content-center">
+          <div class="col-3">
+            <label><b>From</b></label>
+            <select class="form-select" formControlName="from">
+              <option value="Bangkok">Bangkok</option>
+              <option value="Suratthani">Suratthani</option>
+              <option value="Trang">Trang</option>
+              <option value="Phuket">Phuket</option>
+            </select>
+          </div>
+          <div class="col-3">
+            <label><b>To</b></label>
+            <select class="form-select" formControlName="to">
+              <option value="Bangkok">Bangkok</option>
+              <option value="Suratthani">Suratthani</option>
+              <option value="Trang">Trang</option>
+              <option value="Phuket">Phuket</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row g-2 justify-content-center mt-2">
+          <div class="col-2">
+            <label><b>Trip Type</b></label>
+            <span style="color: red;" *ngIf="flightForm.get('type')?.errors?.['required']">*required</span>
+            <div class="mt-2">
+              <input class="form-check-input" type="radio" value="oneWay" name="type" id="type" formControlName="type">
+              <label class="form-check-label ms-2" for="type">One way</label>
+              <input class="form-check-input" type="radio" value="return" name="type" id="type" formControlName="type">
+              <label class="form-check-label ms-2" for="type">Return</label>
+            </div>
+          </div>
+          <div class="col-3">
+            <label><b>Departure</b></label>
+            <span style="color: red;" *ngIf="flightForm.get('departure')?.errors?.['required']">*required</span><br>
+            <mat-form-field appearance="fill">
+              <mat-label>Departure</mat-label>
+              <input matInput [matDatepicker]="Departurepicker" [min]="startdate" formControlName="departure">
+              <mat-datepicker-toggle matSuffix [for]="Departurepicker"></mat-datepicker-toggle>
+              <mat-datepicker #Departurepicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-3">
+            <label><b>Arrival</b></label><br>
+            <mat-form-field appearance="fill">
+              <mat-label>Arrival</mat-label>
+              <input matInput [matDatepicker]="Arrivalpicker" [min]="flightForm.value.departure" formControlName="arrival">
+              <mat-datepicker-toggle matSuffix [for]="Arrivalpicker"></mat-datepicker-toggle>
+              <mat-datepicker #Arrivalpicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row g-2 justify-content-center mt-2">
+          <div class="col-3">
+            <label><b>Adults</b></label>
+            <span style="color: red;" *ngIf="flightForm.get('adults')?.errors?.['required']">*required</span>
+            <span style="color: red;" *ngIf="flightForm.get('adults')?.errors?.['max']">*maximum is 10 people</span>
+            <span style="color: red;" *ngIf="flightForm.get('adults')?.errors?.['pattern']">*please enter positive only</span>
+            <input type="number" class="form-control" id="adults" formControlName="adults" value="0" required />
+          </div>
+          <div class="col-3">
+            <label><b>Children</b></label>
+            <span style="color: red;" *ngIf="flightForm.get('children')?.errors?.['max']">*maximum is 10 people</span>
+            <span style="color: red;" *ngIf="flightForm.get('children')?.errors?.['pattern']">*please enter positive only</span>
+            <input type="number" class="form-control" id="children" formControlName="children" value="0" required />
+          </div>
+          <div class="col-3">
+            <label><b>Infants</b></label>
+            <span style="color: red;" *ngIf="flightForm.get('infants')?.errors?.['max']">*maximum is 10 people</span>
+            <span style="color: red;" *ngIf="flightForm.get('infants')?.errors?.['pattern']">*please enter positive only</span>
+            <input type="number" class="form-control" id="infants" formControlName="infants" value="0" required />
+          </div>
+        </div>
+      </div>
+      <div class="col-8 d-grid gap-2 mt-3 mx-auto">
+        <button class="btn btn-primary" [disabled]="flightForm.invalid" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+  <table class="table table-bordered mt-5">
+    <thead>
+      <tr>
+        <th scope="col">Full Name</th>
+        <th scope="col">From</th>
+        <th scope="col">To</th>
+        <th scope="col">Trip Type</th>
+        <th scope="col">Departure</th>
+        <th scope="col">Arrival</th>
+        <th scope="col">Adults</th>
+        <th scope="col">Children</th>
+        <th scope="col">Infants</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of flight">
+        <td>{{ f.fullName }}</td>
+        <td>{{ f.from}}</td>
+        <td>{{ f.to}}</td>
+        <td>{{ f.type}}</td>
+        <td>{{ f.departure.getDate() + '/' + (f.departure.getMonth() + 1) + '/' + f.departure.getFullYear()}}</td>
+        <td>{{ f.arrival.getDate() + '/' + (f.arrival.getMonth() + 1) + '/' + f.arrival.getFullYear()}}</td>
+        <td>{{ f.adults}}</td>
+        <td>{{ f.children}}</td>
+        <td>{{ f.infants}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
